@@ -1,4 +1,5 @@
-import React from "react";
+// /expenses/$id
+
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 
 const ExpensesDynamicPage = () => {

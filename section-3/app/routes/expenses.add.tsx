@@ -1,4 +1,5 @@
-import React from "react";
+// /expenses/add
+
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 
 const ExpensesAddPage = () => {
