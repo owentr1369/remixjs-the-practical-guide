@@ -6,6 +6,15 @@ import expensesStyles from "~/styles/expenses.css";
 import { LinksFunction } from "@remix-run/node";
 import ExpensesList from "~/components/expenses/ExpensesList";
 
+import type { MetaFunction } from "@remix-run/node";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Expenses" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};
+
 const DUMMY_EXPENSES = [
   {
     id: "e1",

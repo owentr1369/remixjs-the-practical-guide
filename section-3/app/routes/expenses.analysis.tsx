@@ -3,6 +3,15 @@
 import ExpenseStatistics from "~/components/expenses/ExpenseStatistics";
 import Chart from "~/components/expenses/Chart";
 
+import type { MetaFunction } from "@remix-run/node";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Expenses Analysis" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};
+
 const DUMMY_EXPENSES = [
   {
     id: "e1",
