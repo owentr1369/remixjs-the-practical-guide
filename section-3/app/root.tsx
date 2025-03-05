@@ -13,6 +13,8 @@ import authStyles from "~/styles/auth.css";
 import expensesStyles from "~/styles/expenses.css";
 import marketingStyles from "~/styles/marketing.css";
 
+import MainHeader from "~/components/navigation/MainHeader";
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -40,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <MainHeader />
         {children}
         <ScrollRestoration />
         <Scripts />
