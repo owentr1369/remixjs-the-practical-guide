@@ -15,7 +15,7 @@ const ExpensesAddPage = () => {
   return (
     <div>
       <h1 className="text-center">Add Expense</h1>
-      <Modal>
+      <Modal onClose={() => {}}>
         <ExpenseForm />
       </Modal>
     </div>
