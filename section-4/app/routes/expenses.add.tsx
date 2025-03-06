@@ -37,8 +37,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     title: formData.get("title") as string,
     amount: +formData.get("amount")!,
     date: formData.get("date") as string,
-    dateAdded: new Date().toISOString(),
   };
+  console.log("formData", formData);
   try {
     await addExpense(expenseData);
     return { redirect: "/expenses" };
