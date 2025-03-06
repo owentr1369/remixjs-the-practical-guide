@@ -2,7 +2,7 @@
 
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
-import type { MetaFunction } from "@remix-run/node";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -29,3 +29,5 @@ const ExpensesAddPage = () => {
 };
 
 export default ExpensesAddPage;
+
+const action: ActionFunction = async ({ request }) => {};
