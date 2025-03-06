@@ -2,8 +2,9 @@
 
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
-import type { MetaFunction } from "@remix-run/node";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
+import { addExpense } from "~/data/expense.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,3 +30,22 @@ const ExpensesAddPage = () => {
 };
 
 export default ExpensesAddPage;
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const formData = await request.formData();
+  const expenseData = {
+    title: formData.get("title") as string,
+    amount: +formData.get("amount")!,
+    date: formData.get("date") as string,
+    dateAdded: new Date().toISOString(),
+  };
+  try {
+    await addExpense(expenseData);
+    return { redirect: "/expenses" };
+  } catch (error) {
+    return {
+      status: 500,
+      error: new Error("Failed to add expense"),
+    };
+  }
+};
