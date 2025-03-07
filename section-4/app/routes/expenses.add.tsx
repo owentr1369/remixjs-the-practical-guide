@@ -6,6 +6,7 @@ import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { addExpense } from "~/data/expense.server";
 import { redirect } from "@remix-run/node";
+import { validateExpenseInput } from "~/data/validate.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -40,12 +41,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     date: formData.get("date") as string,
   };
   try {
-    await addExpense(expenseData);
-    return redirect("/expenses");
+    validateExpenseInput(expenseData);
   } catch (error) {
-    return {
-      status: 500,
-      error: new Error("Failed to add expense"),
-    };
+    return error;
   }
+  await addExpense(expenseData);
+  return redirect("/expenses");
 };
