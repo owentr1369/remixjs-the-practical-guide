@@ -5,6 +5,7 @@ import Modal from "~/components/util/Modal";
 import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { addExpense } from "~/data/expense.server";
+import { redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,10 +39,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     amount: +formData.get("amount")!,
     date: formData.get("date") as string,
   };
-  console.log("formData", formData);
   try {
     await addExpense(expenseData);
-    return { redirect: "/expenses" };
+    return redirect("/expenses");
   } catch (error) {
     return {
       status: 500,
