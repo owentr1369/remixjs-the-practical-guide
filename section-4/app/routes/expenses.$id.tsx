@@ -8,7 +8,11 @@ import type {
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import { useNavigate, useLoaderData } from "@remix-run/react";
 import Modal from "~/components/util/Modal";
-import { getExpenseById, updateExpense } from "~/data/expense.server";
+import {
+  deleteExpense,
+  getExpenseById,
+  updateExpense,
+} from "~/data/expense.server";
 import { redirect } from "@remix-run/node";
 import { validateExpenseInput } from "~/data/validate.server";
 
@@ -47,19 +51,29 @@ export const loader: LoaderFunction = async ({ params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   const expenseId = params.id;
   const formData = await request.formData();
-  const expenseData = {
-    title: formData.get("title") as string,
-    amount: +formData.get("amount")!,
-    date: formData.get("date") as string,
-  };
-  if (!expenseId) {
-    throw new Error("Invalid expense ID");
+  if (formData.get("intent") === "post") {
+    const expenseData = {
+      title: formData.get("title") as string,
+      amount: +formData.get("amount")!,
+      date: formData.get("date") as string,
+    };
+    if (!expenseId) {
+      throw new Error("Invalid expense ID");
+    }
+    try {
+      validateExpenseInput(expenseData);
+    } catch (error) {
+      return error;
+    }
+    await updateExpense(expenseId, expenseData);
+    return redirect("/expenses");
+  } else if (formData.get("intent") === "delete") {
+    if (!expenseId) {
+      return new Error("Invalid expense ID");
+    }
+    await deleteExpense(expenseId);
+    return redirect("/expenses");
+  } else {
+    return new Error("Invalid request");
   }
-  try {
-    validateExpenseInput(expenseData);
-  } catch (error) {
-    return error;
-  }
-  await updateExpense(expenseId, expenseData);
-  return redirect("/expenses");
 };

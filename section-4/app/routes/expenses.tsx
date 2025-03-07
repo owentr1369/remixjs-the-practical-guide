@@ -3,11 +3,15 @@
 import React from "react";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
 import expensesStyles from "~/styles/expenses.css";
-import { LinksFunction, json } from "@remix-run/node";
+import { LinksFunction } from "@remix-run/node";
 import ExpensesList from "~/components/expenses/ExpensesList";
 import { FaPlus, FaDownload } from "react-icons/fa";
 
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { getExpenses } from "~/data/expense.server";
 
 export const meta: MetaFunction = () => {

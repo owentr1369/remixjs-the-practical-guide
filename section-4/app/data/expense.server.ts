@@ -69,3 +69,16 @@ export async function updateExpense(
     throw error;
   }
 }
+
+export async function deleteExpense(expenseId: string) {
+  try {
+    return await prisma.expense.delete({
+      where: {
+        id: expenseId,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
