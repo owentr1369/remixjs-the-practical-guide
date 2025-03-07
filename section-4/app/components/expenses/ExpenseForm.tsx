@@ -3,18 +3,32 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  useMatches,
   // useSubmit,
   useNavigation,
+  useParams,
 } from "@remix-run/react";
 import type { IExpense } from "~/types/expense";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
+  const params = useParams();
   // const submit = useSubmit();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const currentExpense = useLoaderData() as IExpense | undefined;
+  // const currentExpense = useLoaderData() as IExpense | undefined;
+  const matches = useMatches();
+  const expensesMatch = matches.find(
+    (match: { id: string }) => match.id === "routes/expenses"
+  );
+  const expenses: IExpense[] = expensesMatch
+    ? (expensesMatch.data as IExpense[])
+    : [];
+
+  const currentExpense = expenses.find(
+    (expense: IExpense) => expense.id.toString() === params.id
+  );
 
   const defaultValues = currentExpense
     ? {
