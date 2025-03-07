@@ -10,6 +10,7 @@ import { useNavigate, useLoaderData } from "@remix-run/react";
 import Modal from "~/components/util/Modal";
 import { getExpenseById, updateExpense } from "~/data/expense.server";
 import { redirect } from "@remix-run/node";
+import { validateExpenseInput } from "~/data/validate.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -53,6 +54,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   };
   if (!expenseId) {
     throw new Error("Invalid expense ID");
+  }
+  try {
+    validateExpenseInput(expenseData);
+  } catch (error) {
+    return error;
   }
   await updateExpense(expenseId, expenseData);
   return redirect("/expenses");
