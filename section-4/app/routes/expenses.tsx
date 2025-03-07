@@ -3,7 +3,7 @@
 import React from "react";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
 import expensesStyles from "~/styles/expenses.css";
-import { LinksFunction } from "@remix-run/node";
+import { LinksFunction, json } from "@remix-run/node";
 import ExpensesList from "~/components/expenses/ExpensesList";
 import { FaPlus, FaDownload } from "react-icons/fa";
 
@@ -46,5 +46,6 @@ const ExpensesLayout = () => {
 export default ExpensesLayout;
 
 export const loader: LoaderFunction = async ({ params }) => {
-  return await getExpenses();
+  const expenses = await getExpenses();
+  return expenses;
 };
