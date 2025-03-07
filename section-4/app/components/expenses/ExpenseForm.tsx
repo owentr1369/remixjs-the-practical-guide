@@ -2,9 +2,11 @@ import {
   Form,
   Link,
   useActionData,
+  useLoaderData,
   // useSubmit,
   useNavigation,
 } from "@remix-run/react";
+import type { IExpense } from "~/types/expense";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
@@ -12,7 +14,19 @@ function ExpenseForm() {
   // const submit = useSubmit();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const currentExpense = useLoaderData() as IExpense | undefined;
 
+  const defaultValues = currentExpense
+    ? {
+        title: currentExpense.title,
+        amount: currentExpense.amount,
+        date: currentExpense.date,
+      }
+    : {
+        title: "",
+        amount: 0,
+        date: "",
+      };
   // const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
   //   // Perform your own form validation here
@@ -29,12 +43,20 @@ function ExpenseForm() {
     >
       <p>
         <label htmlFor="title">Expense Title</label>
-        <input type="text" id="title" name="title" required maxLength={30} />
+        <input
+          defaultValue={defaultValues.title}
+          type="text"
+          id="title"
+          name="title"
+          required
+          maxLength={30}
+        />
       </p>
       <div className="form-row">
         <p>
           <label htmlFor="amount">Amount</label>
           <input
+            defaultValue={defaultValues.amount}
             type="number"
             id="amount"
             name="amount"
@@ -45,7 +67,18 @@ function ExpenseForm() {
         </p>
         <p>
           <label htmlFor="date">Date</label>
-          <input type="date" id="date" name="date" max={today} required />
+          <input
+            defaultValue={
+              defaultValues.date
+                ? new Date(defaultValues.date).toISOString().slice(0, 10)
+                : ""
+            }
+            type="date"
+            id="date"
+            name="date"
+            max={today}
+            required
+          />
         </p>
       </div>
       {validationErrors && (

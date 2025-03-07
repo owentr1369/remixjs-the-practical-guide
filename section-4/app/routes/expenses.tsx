@@ -45,7 +45,7 @@ const ExpensesLayout = () => {
 
 export default ExpensesLayout;
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async () => {
   const expenses = await getExpenses();
   return expenses;
 };

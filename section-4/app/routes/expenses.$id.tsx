@@ -1,9 +1,10 @@
 // /expenses/$id
 
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate, useLoaderData } from "@remix-run/react";
 import Modal from "~/components/util/Modal";
+import { getExpenseById } from "~/data/expense.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,6 +14,7 @@ export const meta: MetaFunction = () => {
 };
 
 const ExpensesDynamicPage = () => {
+  useLoaderData();
   const navigate = useNavigate();
   const closeHandler = () => {
     // Navigate back to the expenses page
@@ -29,3 +31,9 @@ const ExpensesDynamicPage = () => {
 };
 
 export default ExpensesDynamicPage;
+
+export const loader: LoaderFunction = async ({ params }) => {
+  const expenseId = params.id;
+  const currentExpense = await getExpenseById(expenseId?.toString()!);
+  return currentExpense;
+};
