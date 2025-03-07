@@ -1,10 +1,15 @@
 // /expenses/$id
 
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import { useNavigate, useLoaderData } from "@remix-run/react";
 import Modal from "~/components/util/Modal";
-import { getExpenseById } from "~/data/expense.server";
+import { getExpenseById, updateExpense } from "~/data/expense.server";
+import { redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,4 +41,19 @@ export const loader: LoaderFunction = async ({ params }) => {
   const expenseId = params.id;
   const currentExpense = await getExpenseById(expenseId?.toString()!);
   return currentExpense;
+};
+
+export const action: ActionFunction = async ({ request, params }) => {
+  const expenseId = params.id;
+  const formData = await request.formData();
+  const expenseData = {
+    title: formData.get("title") as string,
+    amount: +formData.get("amount")!,
+    date: formData.get("date") as string,
+  };
+  if (!expenseId) {
+    throw new Error("Invalid expense ID");
+  }
+  await updateExpense(expenseId, expenseData);
+  return redirect("/expenses");
 };
